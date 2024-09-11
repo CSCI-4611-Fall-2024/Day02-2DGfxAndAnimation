@@ -11,6 +11,8 @@ export class ExampleApp extends gfx.GfxApp
  
     bgColor : gfx.Color = new gfx.Color(0, 0, 0);
     nose : gfx.Node2 | null = null;
+    mouth : gfx.Node2 | null = null;
+    elapsedTime = 0.0;
 
     // --- Create the ExampleApp class ---
     constructor()
@@ -40,9 +42,9 @@ export class ExampleApp extends gfx.GfxApp
         this.nose = gfx.Geometry2Factory.createRect(0.25, 0.25);
         this.scene.add(this.nose);
 
-        const mouth = gfx.Geometry2Factory.createRect(1.8, 0.15);
-        mouth.position = new gfx.Vector2(0, -0.5);
-        this.scene.add(mouth);
+        this.mouth = gfx.Geometry2Factory.createRect(1.8, 0.15);
+        this.mouth.position = new gfx.Vector2(0, -0.5);
+        this.scene.add(this.mouth);
 
         console.log("Hello world");
     }
@@ -50,6 +52,8 @@ export class ExampleApp extends gfx.GfxApp
     // --- Update is called once each frame by the main graphics loop ---
     update(deltaTime: number): void 
     {
+        this.elapsedTime += deltaTime;
+
         if (this.bgColor.g < 0.3) {
             this.bgColor.g += 0.01;
         }
@@ -57,6 +61,13 @@ export class ExampleApp extends gfx.GfxApp
 
         if (this.nose instanceof gfx.Node2) {
             this.nose.position.x += 0.01;
+        }
+
+        if (this.mouth instanceof gfx.Node2) {
+            const fasterTime = 10.0 * this.elapsedTime;
+            const neg1toPos1 = Math.sin(fasterTime);
+            const zeroToPos1 = Math.abs(neg1toPos1);
+            this.mouth.scale = new gfx.Vector2(1, zeroToPos1);
         }
 
     }
